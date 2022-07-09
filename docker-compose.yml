@@ -1,0 +1,81 @@
+# Resources:
+# - Exemple docker compose: https://github.com/adorsys/keycloak-config-cli/blob/main/docker-compose.yml
+# - Documentation de la config du dashboard keycloak: https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/index.html
+# - Documentation API REST: https://documenter.getpostman.com/view/7294517/SzmfZHnd
+
+version: '3.9'
+
+services:
+
+  keycloak:
+    container_name: ${CONTAINER_NAME}
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HTTP_RELATIVE_PATH: auth
+      KEYCLOAK_LOGLEVEL: INFO
+      ROOT_LOGLEVEL: INFO
+    ports:
+      - "8080:8080"
+      - "8787:8787"
+    command:
+      - start-dev
+      - --http-relative-path /auth
+      - --features admin-fine-grained-authz
+
+  keycloak-legacy:
+    container_name: ${CONTAINER_NAME}-legacy
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}-legacy
+    environment:
+      KEYCLOAK_USER: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_LOGLEVEL: INFO
+      ROOT_LOGLEVEL: INFO
+    volumes:
+      - legacy_volume:/opt/jboss/keycloak/providers/
+    ports:
+      - "8081:8080"
+      - "8788:8787"
+    command:
+      - "-c"
+      - "standalone.xml"
+      - "-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled"
+
+
+volumes:
+  legacy_volume:
+
+#  openldap:
+#    image: osixia/openldap:1.5.0
+#    command:
+#      - --loglevel
+#      - info
+#    environment:
+#      DISABLE_CHOWN: "true"
+#      LDAP_LOG_LEVEL: "256"
+#      LDAP_DOMAIN: "example.org"
+#      LDAP_ADMIN_PASSWORD: "admin123"
+#      LDAP_READONLY_USER: "false"
+#      LDAP_TLS: "false"
+#      LDAP_RFC2307BIS_SCHEMA: "false"
+#      LDAP_SEED_INTERNAL_LDIF_PATH: /resources/
+#    ports:
+#      - "8389:389"
+#    volumes:
+#      - openldap_volume:/resources/embedded-ldap.ldif
+
+#  keycloak-config-cli:
+#    build: .
+#    image: adorsys/keycloak-config-cli:latest
+#    depends_on:
+#      - keycloak
+#    volumes:
+#      - ./contrib/example-config:/config
+#    environment:
+#      - keycloak.url=http://keycloak:8080
+#      - keycloak.user=admin
+#      - keycloak.password=admin123
+#      - keycloak.availability-check.enabled=true
+#      - spring.profiles.active=dev
+#      - import.cache.enabled=false
