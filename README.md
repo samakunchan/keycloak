@@ -1,17 +1,26 @@
-KEYCLOAK AVEC DOCKER
--
+# KEYCLOAK AVEC DOCKER
 
-Ceci est une configuration pour installer keycloak avec docker
+Ceci est une configuration pour installer keycloak avec docker.
 
-Etape 1:
----
+### Etape 1: Environnement (IMPORTANT)
+
 Créé un fichier `.env` avec le `.env-example`
 
-Etape 2:
----
+- Unix, PowerShell ect...: 
+```sh
+cp .env-exemple .env
+```
+- cmd.exe (windows)
+```sh
+cp copy .env-exemple .env
+```
 
-    docker compose up -d
+### Etape 2: Containerisation
 
-Pour fermer le container
+```sh
+docker compose up -d
+```
+
+Pour fermer le container:
 
     docker compose down (-v si vous voulez supprimer les volumes en même temps)
