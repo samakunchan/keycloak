@@ -17,10 +17,14 @@ cp copy .env-exemple .env
 
 ### Etape 2: Containerisation
 
-```sh
-docker compose up -d
-```
+Pour les environnements windows, veuillez commenter ou supprimer la ligne suivante dans le `docker-compose.yml`:
+
+    - --http-relative-path /auth
+
+C'est un patch necessaire pour les environnements macs, mais pertubant pour les environnements windows.
+    
+    docker compose up -d
 
 Pour fermer le container:
 
-    docker compose down (-v si vous voulez supprimer les volumes en même temps)
+    docker compose down -v
