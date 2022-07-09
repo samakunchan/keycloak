@@ -13,7 +13,6 @@ services:
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KC_HTTP_RELATIVE_PATH: auth
       KEYCLOAK_LOGLEVEL: INFO
       ROOT_LOGLEVEL: INFO
     ports:
@@ -21,7 +20,7 @@ services:
       - "8787:8787"
     command:
       - start-dev
-      - --http-relative-path /auth
+      - --http-relative-path /auth # Uniquement pour Mac
       - --features admin-fine-grained-authz
 
   keycloak-legacy:
