@@ -5,7 +5,7 @@ Version: 18.0.1
 
 ### C'est quoi Keycloak
 
-Keycloak est un logiciel open source qui permet le **single sign-on (SSO)** with **Identity and Access Management(IAM)** afin de sécuriser n'importe qu'elle application moderne.
+Keycloak est un logiciel open source qui permet le **single sign-on (SSO)** avec **Identity and Access Management(IAM)** afin de sécuriser n'importe qu'elle application moderne.
 <br>Depuis 2018; ce projet de la communauté **WildFly** (plus connus sous le nom de **JBOSS**) est sous la direction de **Red Hat** qui l'utilise comme projet pour son produit **RH-SSO**.
 ### Etape 1: Environnement (IMPORTANT)
 
