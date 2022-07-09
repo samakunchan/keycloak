@@ -1,7 +1,6 @@
 # KEYCLOAK AVEC DOCKER
 
 Version: 18.0.1
-
 <br>Ceci est une configuration pour installer keycloak avec docker.
 
 ### Etape 1: Environnement (IMPORTANT)
