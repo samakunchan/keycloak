@@ -3,7 +3,7 @@
 # - Documentation de la config du dashboard keycloak: https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/index.html
 # - Documentation API REST: https://documenter.getpostman.com/view/7294517/SzmfZHnd
 
-version: '3.9'
+version: "3.9"
 
 services:
 
@@ -16,11 +16,10 @@ services:
       KEYCLOAK_LOGLEVEL: INFO
       ROOT_LOGLEVEL: INFO
     ports:
-      - "8080:8080"
+      - "8085:8080"
       - "8787:8787"
     command:
       - start-dev
-      - --http-relative-path /auth # Uniquement pour Mac
       - --features admin-fine-grained-authz
 
   keycloak-legacy:
