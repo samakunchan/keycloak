@@ -1,6 +1,11 @@
 # KEYCLOAK AVEC DOCKER
 
-Version: 18.0.1
+| Applications | Versions |
+|--------------|----------|
+| Keycloak     | 19.0.0   |
+| Postgres     | 13.2     |
+| PgAdmin      | 6.14     |
+
 <br>Ceci est une configuration pour installer keycloak avec docker.
 
 ### C'est quoi Keycloak
@@ -37,3 +42,9 @@ Pour fermer le container:
 ```shell
 docker compose down -v
 ```    
+
+| Serveurs  | Adresse                                        | Login           | Password  |
+|-----------|------------------------------------------------|-----------------|-----------|
+| Keycloak  | [http://localhost:8085](http://localhost:8085) | admin           | admin123  |
+| PgAdmin   | [http://localhost:5050](http://localhost:5050) | admin@admin.com | admin     |
+Ce sont les informations par défaut, vous pouvez changés ces informations à votre guise dans `.env` et le `docker-compose.yml`
