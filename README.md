@@ -47,4 +47,5 @@ docker compose down -v
 |-----------|------------------------------------------------|-----------------|-----------|
 | Keycloak  | [http://localhost:8085](http://localhost:8085) | admin           | admin123  |
 | PgAdmin   | [http://localhost:5050](http://localhost:5050) | admin@admin.com | admin     |
+
 Ce sont les informations par défaut, vous pouvez changés ces informations à votre guise dans `.env` et le `docker-compose.yml`
