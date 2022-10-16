@@ -22,15 +22,18 @@ cp copy .env-exemple .env
 
 ### Etape 2: Containerisation
 
-Pour les environnements windows, veuillez commenter ou supprimer la ligne suivante dans le `docker-compose.yml`:
+Pour rebuild le container de zéro au propre
+```shell
+sh rebuild.sh
+```
 
-    - --http-relative-path /auth
-
-C'est un patch necessaire pour les environnements macs, mais pertubant pour les environnements windows.
-<br>Puis:
-    
-    docker compose up -d
+Pour lancer le container simplement
+```shell
+docker compose up -d
+```
 
 Pour fermer le container:
 
-    docker compose down -v
+```shell
+docker compose down -v
+```    
