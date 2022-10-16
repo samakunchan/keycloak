@@ -2,6 +2,7 @@
 # - Exemple docker compose: https://github.com/adorsys/keycloak-config-cli/blob/main/docker-compose.yml
 # - Documentation de la config du dashboard keycloak: https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/index.html
 # - Documentation API REST: https://documenter.getpostman.com/view/7294517/SzmfZHnd
+# - Solution pour la configuration finale: https://github.com/keycloak/keycloak/discussions/13516
 
 version: "3.9"
 
@@ -14,31 +15,87 @@ services:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       KEYCLOAK_LOGLEVEL: INFO
+      KC_DB: postgres
+      KC_DB_USERNAME: ${KEYCLOAK_ADMIN}
+      KC_DB_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB_SCHEMA: public
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_URL_HOST: postgres-server
       ROOT_LOGLEVEL: INFO
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres-server
+      DB_DATABASE: keycloak
+      DB_USER: ${KEYCLOAK_ADMIN}
+      DB_SCHEMA: public
+      DB_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     ports:
       - "8085:8080"
       - "8787:8787"
     command:
       - start-dev
       - --features admin-fine-grained-authz
+    depends_on:
+      - postgres-server
 
-  keycloak-legacy:
-    container_name: ${CONTAINER_NAME}-legacy
-    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}-legacy
+#  keycloak-legacy:
+#    container_name: ${CONTAINER_NAME}-legacy
+#    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}-legacy
+#    environment:
+#      KEYCLOAK_USER: ${KEYCLOAK_ADMIN}
+#      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+#      KEYCLOAK_LOGLEVEL: INFO
+#      ROOT_LOGLEVEL: INFO
+#      DB_VENDOR: POSTGRES
+#      DB_ADDR: postgres-server
+#      DB_DATABASE: keycloak
+#      DB_USER: admin
+#      DB_SCHEMA: public
+#      DB_PASSWORD: admin
+#    volumes:
+#      - legacy_volume:/opt/jboss/keycloak/providers/
+#    ports:
+#      - "8081:8080"
+#      - "8788:8787"
+#    command:
+#      - "-c"
+#      - "standalone.xml"
+#      - "-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled"
+#    depends_on:
+#      - postgres-server
+
+  postgres-server:
+    container_name: postgres-server
+    image: "postgres:13.2"
     environment:
-      KEYCLOAK_USER: ${KEYCLOAK_ADMIN}
-      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KEYCLOAK_LOGLEVEL: INFO
-      ROOT_LOGLEVEL: INFO
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     volumes:
-      - legacy_volume:/opt/jboss/keycloak/providers/
+      - data_volume:/var/lib/postgresql/data/
+      - sql_volume:/docker-entrypoint-initdb.d/:ro
     ports:
-      - "8081:8080"
-      - "8788:8787"
-    command:
-      - "-c"
-      - "standalone.xml"
-      - "-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled"
+      - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin
+    image: "dpage/pgadmin4:6.14"
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_HOST: postgres-server
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres-server
 
 volumes:
   legacy_volume:
+  data_volume:
+  sql_volume:
+
+networks:
+  keycloak-network:
+    driver: bridge
