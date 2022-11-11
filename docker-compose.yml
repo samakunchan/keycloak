@@ -52,7 +52,7 @@ services:
 #      DB_SCHEMA: public
 #      DB_PASSWORD: admin
 #    volumes:
-#      - legacy_volume:/opt/jboss/keycloak/providers/
+#      - ./project:/opt/jboss/keycloak/providers/
 #    ports:
 #      - "8081:8080"
 #      - "8788:8787"
@@ -78,7 +78,7 @@ services:
 
   pgadmin:
     container_name: pgadmin
-    image: "dpage/pgadmin4:6.14"
+    image: "dpage/pgadmin4:6.15"
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_HOST: postgres-server
@@ -91,11 +91,27 @@ services:
     depends_on:
       - postgres-server
 
+#  wiki:
+#    container_name: wikijs
+#    image: ghcr.io/requarks/wiki:latest
+#    environment:
+#      DB_TYPE: postgres
+#      DB_HOST: postgres-server
+#      DB_PORT: 5432
+#      DB_USER: admin
+#      DB_PASS: admin
+#      DB_NAME: wiki
+#    restart: unless-stopped
+#    ports:
+#      - "3005:3000"
+#    depends_on:
+#      - postgres-server
+
 volumes:
   legacy_volume:
   data_volume:
   sql_volume:
 
 networks:
-  keycloak-network:
-    driver: bridge
+  default:
+    name: keycloak-network
