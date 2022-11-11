@@ -77,11 +77,13 @@ NB: Il est recommandé de créer son propre realm et ne pas travailler sur le re
    * A partir Keycloak v19: Cliquez sur l'onglet "Advanced", puis tout en bas "Authentication Flow Overrides", selectionnez `Browser flow` à `browser` et `Direct Grant Flow` à `direct grant`.
 
 
-      Ex:
          realm_a_remplacer = demo
+         
          id_du_client = mon_app
+         
          redirect_uri = http://localhost:4000
-      http://localhost:8085/realms/{{realm_a_remplacer}}/protocol/openid-connect/auth?response_type=code&client_id={{id_du_client}}&redirect_uri={{redirect_uri}}/authorization-code/callback
+         
+      `http://localhost:8085/realms/{{realm_a_remplacer}}/protocol/openid-connect/auth?response_type=code&client_id={{id_du_client}}&redirect_uri={{redirect_uri}}/authorization-code/callback`
 
 
 
