@@ -91,6 +91,14 @@ services:
     depends_on:
       - postgres-server
 
+  maildev:
+    container_name: maildev
+    image: maildev/maildev
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - "1025:25"
+      - "1080:80"
+
 #  wiki:
 #    container_name: wikijs
 #    image: ghcr.io/requarks/wiki:latest

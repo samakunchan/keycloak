@@ -2,7 +2,7 @@
 
 | Applications | Versions |
 |--------------|----------|
-| Keycloak     | 19.0.0   |
+| Keycloak     | 20.0.1   |
 | Postgres     | 13.2     |
 | PgAdmin      | 6.14     |
 
