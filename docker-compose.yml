@@ -21,6 +21,8 @@ services:
       KC_DB_SCHEMA: public
       KC_DB_URL_DATABASE: keycloak
       KC_DB_URL_HOST: postgres-server
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/certificate.pem
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       ROOT_LOGLEVEL: INFO
       DB_VENDOR: POSTGRES
       DB_ADDR: postgres-server
@@ -30,12 +32,14 @@ services:
       DB_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     ports:
       - "8085:8080"
-      - "8787:8787"
+      - "8443:8443"
     command:
       - start-dev
       - --features admin-fine-grained-authz
     depends_on:
       - postgres-server
+    volumes:
+      - ./certs:/opt/keycloak/certs
 
 #  keycloak-legacy:
 #    container_name: ${CONTAINER_NAME}-legacy
@@ -78,7 +82,7 @@ services:
 
   pgadmin:
     container_name: pgadmin
-    image: "dpage/pgadmin4:6.15"
+    image: "dpage/pgadmin4:latest"
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_HOST: postgres-server
