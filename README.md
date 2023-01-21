@@ -49,3 +49,5 @@ docker compose down -v
 | PgAdmin   | [http://localhost:5050](http://localhost:5050) | admin@admin.com | admin     |
 
 Ce sont les informations par défaut, vous pouvez changés ces informations à votre guise dans `.env` et le `docker-compose.yml`
+
+     docker compose down -v && docker compose build --no-cache && docker compose up -d && echo "C'est bon..."
