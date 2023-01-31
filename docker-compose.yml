@@ -3,6 +3,7 @@
 # - Documentation de la config du dashboard keycloak: https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/index.html
 # - Documentation API REST: https://documenter.getpostman.com/view/7294517/SzmfZHnd
 # - Solution pour la configuration finale: https://github.com/keycloak/keycloak/discussions/13516
+# - Solution pour installer keycloak en SSL: https://slash-root.fr/keycloak-installation-avec-docker-et-reverse-proxy-ssl-nginx/
 
 version: "3.9"
 
@@ -21,8 +22,10 @@ services:
       KC_DB_SCHEMA: public
       KC_DB_URL_DATABASE: keycloak
       KC_DB_URL_HOST: postgres-server
-      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/certificate.pem
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
+      KC_HOSTNAME_STRICT_HTTPS: "true"
+      KC_HTTP_ENABLED: "false"
+      KC_PROXY: edge
+      KC_HOSTNAME: secure-connect.devpapangue.com
       ROOT_LOGLEVEL: INFO
       DB_VENDOR: POSTGRES
       DB_ADDR: postgres-server
@@ -32,40 +35,15 @@ services:
       DB_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     ports:
       - "8085:8080"
-      - "8443:8443"
     command:
-      - start-dev
-      - --features admin-fine-grained-authz
+      - --verbose
+      - start
+    #      - --optimized
     depends_on:
       - postgres-server
     volumes:
-      - ./certs:/opt/keycloak/certs
-
-#  keycloak-legacy:
-#    container_name: ${CONTAINER_NAME}-legacy
-#    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}-legacy
-#    environment:
-#      KEYCLOAK_USER: ${KEYCLOAK_ADMIN}
-#      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-#      KEYCLOAK_LOGLEVEL: INFO
-#      ROOT_LOGLEVEL: INFO
-#      DB_VENDOR: POSTGRES
-#      DB_ADDR: postgres-server
-#      DB_DATABASE: keycloak
-#      DB_USER: admin
-#      DB_SCHEMA: public
-#      DB_PASSWORD: admin
-#    volumes:
-#      - ./project:/opt/jboss/keycloak/providers/
-#    ports:
-#      - "8081:8080"
-#      - "8788:8787"
-#    command:
-#      - "-c"
-#      - "standalone.xml"
-#      - "-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled"
-#    depends_on:
-#      - postgres-server
+      - /etc/letsencrypt/live/secure-connect.devpapangue.com/fullchain.pem:/etc/x509/tls.crt
+      - /etc/letsencrypt/live/secure-connect.devpapangue.com/privkey.pem:/etc/x509/tls.key
 
   postgres-server:
     container_name: postgres-server
@@ -95,35 +73,42 @@ services:
     depends_on:
       - postgres-server
 
-  maildev:
-    container_name: maildev
-    image: maildev/maildev
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
-    ports:
-      - "1025:25"
-      - "1080:80"
-
-#  wiki:
-#    container_name: wikijs
-#    image: ghcr.io/requarks/wiki:latest
-#    environment:
-#      DB_TYPE: postgres
-#      DB_HOST: postgres-server
-#      DB_PORT: 5432
-#      DB_USER: admin
-#      DB_PASS: admin
-#      DB_NAME: wiki
-#    restart: unless-stopped
-#    ports:
-#      - "3005:3000"
-#    depends_on:
-#      - postgres-server
-
 volumes:
   legacy_volume:
   data_volume:
   sql_volume:
 
-networks:
-  default:
-    name: keycloak-network
+
+#server {
+#  listen 80;
+#  server_name secure-connect.devpapangue.com;
+#  rewrite ^ https://secure-connect.devpapangue.com permanent;
+#}
+#
+#server {
+#  listen 443 ssl;
+#  server_name secure-connect.devpapangue.com;
+#  ssl_certificate /etc/letsencrypt/live/secure-connect.devpapangue.com/fullchain.pem;
+#  ssl_certificate_key /etc/letsencrypt/live/secure-connect.devpapangue.com/privkey.pem;
+#  ssl_session_cache builtin:1000 shared:SSL:10m;
+#  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+#  ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
+#  ssl_prefer_server_ciphers on;
+#
+#  location / {
+#    proxy_set_header Host $host;
+#    proxy_set_header X-Real-IP $remote_addr;
+#    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#    proxy_set_header X-Forwarded-Proto $scheme;
+#    proxy_pass http://51.77.140.50:8085;
+#  }
+#}
+
+#  build                   Creates a new and optimized server image.
+#  start                   Start the server.
+#  start-dev               Start the server in development mode.
+#  export                  Export data from realms to a file or directory.
+#  import                  Import data from a directory or a file.
+#  show-config             Print out the current configuration.
+#  tools                   Utilities for use and interaction with the server.
+#  completion            Generate bash/zsh completion script for kc.sh.
