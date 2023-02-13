@@ -4,6 +4,7 @@
 # - Documentation API REST: https://documenter.getpostman.com/view/7294517/SzmfZHnd
 # - Solution pour la configuration finale: https://github.com/keycloak/keycloak/discussions/13516
 # - Solution pour installer keycloak en SSL: https://slash-root.fr/keycloak-installation-avec-docker-et-reverse-proxy-ssl-nginx/
+# - Un genre d'explication de config keyclaok: https://www.youtube.com/watch?v=duawSV69LDI&
 
 version: "3.9"
 
@@ -38,10 +39,10 @@ services:
     command:
       - --verbose
       - start
-    #      - --optimized
     depends_on:
       - postgres-server
     volumes:
+      # Il va sans dire qu'il faut avoir créé les fichiers fullchain.pem et privkey.pem au préalable. Voir liens ci-dessus pour le SSL.
       - /etc/letsencrypt/live/secure-connect.devpapangue.com/fullchain.pem:/etc/x509/tls.crt
       - /etc/letsencrypt/live/secure-connect.devpapangue.com/privkey.pem:/etc/x509/tls.key
 
