@@ -48,8 +48,6 @@ services:
     volumes:
       - data_volume:/var/lib/postgresql/data/
       - sql_volume:/docker-entrypoint-initdb.d/:ro
-    ports:
-      - "5432:5432"
 
   pgadmin:
     container_name: pgadmin
@@ -65,14 +63,6 @@ services:
       - "5050:80"
     depends_on:
       - postgres-server
-
-  maildev:
-    container_name: maildev
-    image: maildev/maildev
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
-    ports:
-      - "1025:25"
-      - "1080:80"
 
 volumes:
   legacy_volume:

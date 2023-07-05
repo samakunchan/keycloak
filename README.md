@@ -27,17 +27,21 @@ cp copy .env-exemple .env
 
 ### Etape 2: Containerisation
 
-Pour rebuild le container de zéro au propre
+##### Pour rebuild le container de zéro au propre
 ```shell
-sh rebuild.sh
+sh reset.sh
 ```
 
-Pour lancer le container simplement
+##### Pour lancer le container simplement
 ```shell
-docker compose up -d
+docker-compose -f docker-compose.yml -f docker-compose-dev.yml up -d --force-recreate
+```
+ou
+```shell
+sh build-dev.sh
 ```
 
-Pour fermer le container:
+##### Pour fermer le container:
 
 ```shell
 docker compose down -v
