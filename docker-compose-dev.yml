@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  keycloak:
+    platform: linux/x86_64
+    command:
+      - start-dev
+      - --features admin-fine-grained-authz
+  postgres-server:
+    ports:
+      - "5433:5432"
+
+  maildev:
+    container_name: maildev
+    image: maildev/maildev
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - "1025:25"
+      - "1080:80"

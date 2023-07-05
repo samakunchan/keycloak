@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  keycloak:
+    environment:
+      KC_HOSTNAME_STRICT_HTTPS: "true"
+      KC_HTTP_ENABLED: "false"
+      KC_PROXY: edge
+      KC_HOSTNAME: secure-connect.devpapangue.com
+    ports:
+      - "8085:8080"
+    command:
+      - --verbose
+      - start
+    volumes:
+      - /etc/letsencrypt/live/secure-connect.devpapangue.com/fullchain.pem:/etc/x509/tls.crt
+      - /etc/letsencrypt/live/secure-connect.devpapangue.com/privkey.pem:/etc/x509/tls.key
+
+  postgres-server:
+    ports:
+      - "5432:5432"
+

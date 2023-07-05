@@ -23,10 +23,6 @@ services:
       KC_DB_SCHEMA: public
       KC_DB_URL_DATABASE: keycloak
       KC_DB_URL_HOST: postgres-server
-      KC_HOSTNAME_STRICT_HTTPS: "true"
-      KC_HTTP_ENABLED: "false"
-      KC_PROXY: edge
-      KC_HOSTNAME: secure-connect.devpapangue.com
       ROOT_LOGLEVEL: INFO
       DB_VENDOR: POSTGRES
       DB_ADDR: postgres-server
@@ -41,10 +37,6 @@ services:
       - start
     depends_on:
       - postgres-server
-    volumes:
-      # Il va sans dire qu'il faut avoir créé les fichiers fullchain.pem et privkey.pem au préalable. Voir liens ci-dessus pour le SSL.
-      - /etc/letsencrypt/live/secure-connect.devpapangue.com/fullchain.pem:/etc/x509/tls.crt
-      - /etc/letsencrypt/live/secure-connect.devpapangue.com/privkey.pem:/etc/x509/tls.key
 
   postgres-server:
     container_name: postgres-server
@@ -56,8 +48,6 @@ services:
     volumes:
       - data_volume:/var/lib/postgresql/data/
       - sql_volume:/docker-entrypoint-initdb.d/:ro
-    ports:
-      - "5432:5432"
 
   pgadmin:
     container_name: pgadmin
@@ -78,7 +68,6 @@ volumes:
   legacy_volume:
   data_volume:
   sql_volume:
-
 
 #server {
 #  listen 80;
@@ -113,3 +102,4 @@ volumes:
 #  show-config             Print out the current configuration.
 #  tools                   Utilities for use and interaction with the server.
 #  completion            Generate bash/zsh completion script for kc.sh.
+
