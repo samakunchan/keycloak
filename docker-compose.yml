@@ -3,6 +3,7 @@
 # - Documentation de la config du dashboard keycloak: https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/index.html
 # - Documentation API REST: https://documenter.getpostman.com/view/7294517/SzmfZHnd
 # - Solution pour la configuration finale: https://github.com/keycloak/keycloak/discussions/13516
+# - Solution pour installer keycloak en SSL: https://slash-root.fr/keycloak-installation-avec-docker-et-reverse-proxy-ssl-nginx/
 # - Un genre d'explication de config keyclaok: https://www.youtube.com/watch?v=duawSV69LDI&
 
 version: "3.9"
@@ -31,10 +32,9 @@ services:
       DB_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     ports:
       - "8085:8080"
-      - "8443:8443"
     command:
-      - start-dev
-      - --features admin-fine-grained-authz
+      - --verbose
+      - start
     depends_on:
       - postgres-server
 
@@ -68,3 +68,38 @@ volumes:
   legacy_volume:
   data_volume:
   sql_volume:
+
+#server {
+#  listen 80;
+#  server_name secure-connect.devpapangue.com;
+#  rewrite ^ https://secure-connect.devpapangue.com permanent;
+#}
+#
+#server {
+#  listen 443 ssl;
+#  server_name secure-connect.devpapangue.com;
+#  ssl_certificate /etc/letsencrypt/live/secure-connect.devpapangue.com/fullchain.pem;
+#  ssl_certificate_key /etc/letsencrypt/live/secure-connect.devpapangue.com/privkey.pem;
+#  ssl_session_cache builtin:1000 shared:SSL:10m;
+#  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+#  ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
+#  ssl_prefer_server_ciphers on;
+#
+#  location / {
+#    proxy_set_header Host $host;
+#    proxy_set_header X-Real-IP $remote_addr;
+#    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#    proxy_set_header X-Forwarded-Proto $scheme;
+#    proxy_pass http://51.77.140.50:8085;
+#  }
+#}
+
+#  build                   Creates a new and optimized server image.
+#  start                   Start the server.
+#  start-dev               Start the server in development mode.
+#  export                  Export data from realms to a file or directory.
+#  import                  Import data from a directory or a file.
+#  show-config             Print out the current configuration.
+#  tools                   Utilities for use and interaction with the server.
+#  completion            Generate bash/zsh completion script for kc.sh.
+
