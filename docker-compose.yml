@@ -5,8 +5,7 @@
 # - Solution pour la configuration finale: https://github.com/keycloak/keycloak/discussions/13516
 # - Solution pour installer keycloak en SSL: https://slash-root.fr/keycloak-installation-avec-docker-et-reverse-proxy-ssl-nginx/
 # - Un genre d'explication de config keyclaok: https://www.youtube.com/watch?v=duawSV69LDI&
-
-version: "3.9"
+# - Toutes les versions de keycloak : https://quay.io/repository/keycloak/keycloak?tab=tags&tag=latest
 
 services:
 
