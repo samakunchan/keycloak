@@ -3,7 +3,8 @@ services:
     platform: linux/x86_64
     command:
       - start-dev
-      - --features admin-fine-grained-authz
+    environment:
+      KC_FEATURES: admin-fine-grained-authz
   postgres-server:
     ports:
       - "5433:5432"
