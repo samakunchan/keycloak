@@ -1,3 +1,5 @@
+version: "3.4" # OVH ne peux pas encore s'en passer
+
 services:
   keycloak:
     environment:
