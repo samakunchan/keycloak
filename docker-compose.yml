@@ -64,7 +64,6 @@ services:
       - postgres-server
 
 volumes:
-  legacy_volume:
   data_volume:
   sql_volume:
 
