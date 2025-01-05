@@ -39,7 +39,7 @@ services:
 
   postgres-server:
     container_name: postgres-server
-    image: "postgres:13.2"
+    image: "postgres:16.3-alpine"
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: admin
